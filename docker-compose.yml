@@ -1,0 +1,25 @@
+services:
+  keycloaktest:
+    image: ${DOCKER_REGISTRY-}keycloaktest
+    container_name: Api
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+    build:
+      context: KeycloakTest
+      dockerfile: Dockerfile
+    ports:
+        - 24550:8080
+        - 24551:8081
+      
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev
+    environment:
+        - KC_HEATH_ENABLED=true
+        - KEYCLOAK_ADMIN=admin
+        - KEYCLOAK_ADMIN_PASSWORD=admin  
+    volumes:
+        - ./.containers/identity:/opt/keycloak/data
+    ports:
+        - 8090:8080 
